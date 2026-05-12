@@ -5,10 +5,14 @@ pub struct Polynomial<F: Field> {
 }
 
 impl<F: Field> Polynomial<F> {
+    pub fn new(coeffs: Vec<F>) -> Self {
+        Self { coeffs }
+    }
+
     pub fn evaluate(&self, x: F) -> F {
         self.coeffs // fx = a0 + a1 * x + an * x^n
-            .iter() // [a0,a1,an]
-            .rev() // [an,a1,a0]
+            .iter() // [a0, a1, an]
+            .rev() // [an, a1, a0]
             .fold(F::zero(), |acc, &c| acc.mul(x).add(c)) // acc_new = acc * x + c
     }
 }
@@ -21,8 +25,8 @@ mod tests {
     #[test]
     fn test_poly_eval() {
         let p = Polynomial {
-            coeffs: vec![Zp(1), Zp(2)],
+            coeffs: vec![Zp::new(1), Zp::new(2)],
         };
-        assert_eq!(p.evaluate(Zp(3)), Zp(7));
+        assert_eq!(p.evaluate(Zp::new(3)), Zp::new(7));
     }
 }

@@ -36,14 +36,26 @@ pub const PRIME: i128 = 2147483647;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Zp(pub i128);
+impl Zp {
+    pub fn new(value: i128) -> Self {
+        let v = (value % PRIME + PRIME) % PRIME;
+        Zp(v)
+    }
 
+    pub fn value(self) -> i128 {
+        self.0
+    }
+}
+//
 impl Field for Zp {
     fn add(self, rhs: Self) -> Self {
-        Zp((self.0 + rhs.0) % PRIME)
+        Zp::new(self.0 + rhs.0)
     }
+
     fn mul(self, rhs: Self) -> Self {
-        Zp((self.0 * rhs.0) % PRIME)
+        Zp::new(self.0 * rhs.0)
     }
+
     fn inv(self) -> Self {
         //  Euclidean Algorithm
         let (mut a, mut b) = (self.0, PRIME);
@@ -55,12 +67,14 @@ impl Field for Zp {
             u -= t * v;
             std::mem::swap(&mut u, &mut v);
         }
-        Zp((u + PRIME) % PRIME)
+        Zp::new(u)
     }
+
     fn zero() -> Self {
-        Zp(0)
+        Zp::new(0)
     }
+
     fn one() -> Self {
-        Zp(1)
+        Zp::new(1)
     }
 }
