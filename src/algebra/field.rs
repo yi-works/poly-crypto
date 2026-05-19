@@ -21,12 +21,21 @@ pub trait Field: Sized + Copy + PartialEq {
     }
 }
 
-pub const PRIME: i128 = 2147483647;
+pub trait NTTField: Field {
+    fn primitive_root() -> Self;
+    fn modulus() -> i128;
+    fn from_i128(x: i128) -> Self;
+}
+
+// 998244353 = 119 * 2^23 + 1
+pub const PRIME: i128 = 998244353;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
+// Zp(x) ≡ x mod p
 pub struct Zp(pub i128);
 impl Zp {
     pub fn new(value: i128) -> Self {
+        // -1 mod p → p-1
         let v = (value % PRIME + PRIME) % PRIME;
         Zp(v)
     }
@@ -70,6 +79,18 @@ impl Field for Zp {
 
     fn one() -> Self {
         Zp::new(1)
+    }
+}
+
+impl NTTField for Zp {
+    fn primitive_root() -> Self {
+        Zp::new(3)
+    }
+    fn modulus() -> i128 {
+        PRIME
+    }
+    fn from_i128(x: i128) -> Self {
+        Zp::new(x)
     }
 }
 
