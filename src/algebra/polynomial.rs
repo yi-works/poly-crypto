@@ -17,6 +17,21 @@ impl<F: Field> Polynomial<F> {
             .rev() // [an, a1, a0]
             .fold(F::zero(), |acc, &c| acc.mul(x).add(c)) // acc_new = acc * x + c
     }
+
+    pub fn mul_naive(&self, other: &Self) -> Self {
+        let n = self.coeffs.len();
+        let m = other.coeffs.len();
+
+        let mut ans = vec![F::zero(); n + m];
+
+        for i in 0..n {
+            for j in 0..m {
+                ans[i + j] = ans[i + j].add(self.coeffs[i].mul(other.coeffs[j]));
+            }
+        }
+
+        Self::new(ans)
+    }
 }
 
 impl<F: NTTField> Polynomial<F> {
