@@ -8,7 +8,7 @@ A Rust library for Finite Field arithmetic, Shamir's Secret Sharing, and Number 
 ## Benchmark
 
 多項式の畳み込みにおいて、ナイーブ実装（O(n²)）と  
-NTT実装（O(n log n)）の性能比較を行った。
+NTT実装（O(n log n)）の性能比較を行った
 
 ### Results
 
